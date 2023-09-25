@@ -1,11 +1,10 @@
-<?php
+<?php 
 
 namespace App\Providers;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,24 +13,33 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<class-string, array<int, class-string>>
      */
-    protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+    protected $listen = [      
+        \App\Events\UserCreating::class => [
+           \App\Listeners\RegisterUserInApi::class,
         ],
+        \App\Events\UserRegistered::class => [
+            \App\Listeners\SendWelcomeEmail::class,
+        ],
+        
     ];
+    
 
     /**
      * Register any events for your application.
+     *
+     * @return void
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        // You can register custom events and listeners here if needed
     }
 
     /**
      * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
      */
-    public function shouldDiscoverEvents(): bool
+    public function shouldDiscoverEvents()
     {
         return false;
     }
